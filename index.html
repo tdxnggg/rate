@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDRate - Tỷ Giá Thời Gian Thực & Quy Đổi Tiền Tệ</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-50 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 group cursor-pointer">
+                <div class="p-2 bg-emerald-700 dark:bg-emerald-900/50 rounded-xl group-hover:scale-110 transition-transform duration-500">
+                    <i class="fa-solid fa-comments-dollar text-white dark:text-emerald-300 text-2xl animate-pulse"></i>
+                </div>
+                <span class="text-xl font-black tracking-wider bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-700 bg-clip-text text-transparent dark:from-emerald-10000 dark:to-teal-10000">TDRate</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="btn-theme" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-xs" title="Đổi giao diện">
+                    <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                </button>
+                <div id="network-status" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-400 transition-all duration-500 shadow-xs border border-emerald-200/50 dark:border-emerald-900/40">
+                    <i class="fa-solid fa-circle text-[9px] mr-1.5 animate-ping text-emerald-600 dark:text-emerald-400"></i> Trực tuyến
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 space-y-8">
+            
+            <section class="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl shadow-xl shadow-slate-100/40 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-800/80 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/5">
+                <h2 class="text-lg font-extrabold mb-6 text-slate-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-calculator text-emerald-700 dark:text-emerald-400"></i> Bộ chuyển đổi tiền tệ chuyên nghiệp
+                </h2>
+                
+                <div class="flex flex-col md:flex-row items-stretch md:items-end gap-5">
+                    <div class="w-full flex-1 space-y-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Số tiền gốc</label>
+                        <div class="flex border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 rounded-xl overflow-hidden focus-within:border-emerald-600 dark:focus-within:border-emerald-400 focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-4 focus-within:ring-emerald-100 dark:focus-within:ring-emerald-950/40 transition-all duration-300 h-[56px]">
+                            <input type="number" id="from-amount" value="1" class="w-full p-4 font-black text-lg text-slate-900 dark:text-white bg-transparent outline-none">
+                            <select id="from-currency" class="bg-white dark:bg-slate-900 border-l border-slate-300 dark:border-slate-700 px-3 text-sm font-bold text-slate-800 dark:text-slate-200 cursor-pointer outline-none min-w-[125px]">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center py-1 md:py-0">
+                        <button id="btn-swap" class="bg-emerald-100/80 dark:bg-emerald-950/60 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-emerald-800 dark:text-emerald-400 hover:text-white dark:hover:text-slate-950 p-3.5 rounded-xl transition-all duration-300 cursor-pointer shadow-md hover:scale-110 active:scale-95 group" title="Đảo chiều">
+                            <i class="fa-solid fa-arrows-rotate md:rotate-90 text-sm group-hover:rotate-180 transition-transform duration-500"></i>
+                        </button>
+                    </div>
+
+                    <div class="w-full flex-1 space-y-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Kết quả nhận được</label>
+                        <div class="flex border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 rounded-xl overflow-hidden focus-within:border-emerald-600 dark:focus-within:border-emerald-400 focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-4 focus-within:ring-emerald-100 dark:focus-within:ring-emerald-950/40 transition-all duration-300 h-[56px]">
+                            <input type="text" id="to-amount" readonly class="w-full p-4 font-black text-lg text-emerald-700 dark:text-emerald-400 bg-transparent outline-none font-mono" placeholder="0.00">
+                            <select id="to-currency" class="bg-white dark:bg-slate-900 border-l border-slate-300 dark:border-slate-700 px-3 text-sm font-bold text-slate-800 dark:text-slate-200 cursor-pointer outline-none min-w-[125px]">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <p id="rate-info" class="text-xs text-slate-500 dark:text-slate-400 mt-4 italic font-bold flex items-center gap-1.5"></p>
+            </section>
+
+            <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl shadow-slate-100/40 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-800/80 transition-all duration-300">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
+                        <i class="fa-solid fa-chart-line text-emerald-700 dark:text-emerald-400"></i> Phân tích xu hướng (7 ngày gần nhất)
+                    </h2>
+                    <span id="chart-pair-name" class="text-xs font-black text-emerald-800 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-200/30 dark:border-emerald-900/40 shadow-xs">USD/VND</span>
+                </div>
+                <div class="relative h-64 w-full">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+            
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-xl shadow-slate-100/40 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-800/80">
+                <div class="relative group">
+                    <input type="text" id="search-currency" class="w-full p-3 pl-10 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl outline-none focus:border-emerald-600 dark:focus:border-emerald-400 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-white transition-all duration-300 font-bold" placeholder="Tìm mã hoặc tên tiền tệ...">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-4 text-sm text-slate-400 transition-colors"></i>
+                </div>
+            </div>
+
+            <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl shadow-slate-100/40 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-800/80 transition-all duration-300">
+                <h2 class="text-md font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-money-bill-1-wave text-emerald-700 dark:text-emerald-400"></i> Tỷ giá Ngoại tệ (vs USD)
+                </h2>
+                <div class="overflow-y-auto max-h-[300px] pr-1 scrollbar-thin">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider sticky top-0 bg-white dark:bg-slate-900 z-10 transition-colors">
+                                <th class="pb-3 w-10">Ghim</th>
+                                <th class="pb-3">Tiền tệ</th>
+                                <th class="pb-3 text-right">Tỷ giá</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rates-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl shadow-slate-100/40 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-800/80 transition-all duration-300">
+                <h2 class="text-md font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-coins text-amber-500 dark:text-amber-400"></i> Giá Tiền Điện Tử (Real-time)
+                </h2>
+                <div class="overflow-y-auto max-h-[300px] pr-1 scrollbar-thin">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider sticky top-0 bg-white dark:bg-slate-900 z-10 transition-colors">
+                                <th class="pb-3 w-10">Ghim</th>
+                                <th class="pb-3">Token</th>
+                                <th class="pb-3 text-right">Giá (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crypto-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800/80 mt-auto transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-bold text-slate-500 dark:text-slate-400">
+            <div>© 2026 TDRate.</div>
+            <div class="flex items-center space-x-4 text-sm">
+                <span>Phát triển bởi <strong class="text-slate-800 dark:text-slate-500">tdxng</strong></span>
+                <a href="https://www.facebook.com/tdxngggg/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-1 font-black transition-colors duration-300">
+                    <i class="fa-brands fa-facebook text-base"></i>
+                    <span>Facebook</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

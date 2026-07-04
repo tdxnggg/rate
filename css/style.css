@@ -1,0 +1,84 @@
+/* --- ĐỊNH NGHĨA BIẾN MÀU SẮC ĐỘNG (LIGHT / DARK) --- */
+:root {
+    --bg-main: #f8fafc;        /* Nền chính Light Mode (slate-50) */
+    --bg-card: #ffffff;        /* Nền Card Light Mode */
+    --bg-input: #f1f5f9;       /* Nền Input Light Mode */
+    --text-main: #0f172a;      /* Chữ chính Light Mode */
+    --text-muted: #64748b;     /* Chữ phụ Light Mode */
+    --border-color: #e2e8f0;   /* Viền Light Mode */
+}
+
+/* Khi kích hoạt chế độ tối .dark */
+html.dark {
+    color-scheme: dark;
+    --bg-main: #020617;        /* Nền chính Dark Mode (slate-950) */
+    --bg-card: #0f172a;        /* Nền Card Dark Mode (slate-900) */
+    --bg-input: #020617;       /* Nền Input Dark Mode (slate-950) */
+    --text-main: #f8fafc;      /* Chữ chính Dark Mode (slate-50) */
+    --text-muted: #94a3b8;     /* Chữ phụ Dark Mode (slate-400) */
+    --border-color: #1e293b;   /* Viền Dark Mode (slate-800) */
+}
+
+/* --- ÁP DỤNG BIẾN MÀU VÀO TOÀN BỘ WEB --- */
+body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+header, section, footer {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+    transition: all 0.4s ease;
+}
+
+h2, span, th, td, label {
+    color: var(--text-main) !important;
+}
+
+.text-slate-400, .text-slate-500, p#rate-info {
+    color: var(--text-muted) !important;
+}
+
+/* Áp dụng màu tối cho các ô nhập liệu và ô Chọn Select */
+input, select {
+    background-color: var(--bg-input) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+/* Riêng ô kết quả giữ màu xanh Emerald nổi bật */
+#to-amount {
+    color: #10b981 !important; 
+}
+
+/* --- CÁC HIỆU ỨNG TIỆN ÍCH KHÁC --- */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+@keyframes fadeInRow {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-row {
+    animation: fadeInRow 0.35s ease forwards;
+}
